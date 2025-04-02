@@ -1,9 +1,0 @@
-# SNPhub
-
-SNPhub aims at providing a universal platform for SNP chip data for quality control and data transformation for downstream analyses such as GWAS.
-It will include scripts to convert BLAST results from probe seqs against a reference genome to convert these calls into a vcf
-of known SNPs which can be used for donwstream tools such as GATK.
-
-Other tools will allow to convert the SNP call matrix of a population into a numeric matrix and into hapmap format.
-
-Currently in progress ....
