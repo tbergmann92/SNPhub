@@ -23,7 +23,6 @@ check_unrecognized <- function(unique_vals, allowed_vals) {
 #'
 #' @export
 plot_snp_distribution <- function(snp_counts, output, title) {
-    
 	# Remove "Total" and optionally "Hets" from plotting
 	plot_counts <- snp_counts[!names(snp_counts) %in% c("Total")]
 	
@@ -65,6 +64,15 @@ plot_snp_distribution <- function(snp_counts, output, title) {
     dev.off()  # Close the PNG device
 }
 
+#' Convert string to individual chars
+#' @param str A string to be converted into chars
+#' @return A vector of chars
+#' @export
+#' @example
+#' chars("ATGC")
+#'
+chars <- function(str) strsplit(str, "")[[1]]
+
 #' Count SNP Calls
 #'
 #' Takes a matrix of single-letter SNP calls and counts the frequency of each type.
@@ -73,38 +81,26 @@ plot_snp_distribution <- function(snp_counts, output, title) {
 #' @return A named list with counts for each SNP type, heterozygous calls, and missing data.
 #' @export
 count_snp_calls <- function(matrix_data) {
-	snp_counts <- list(
-		A = sum(matrix_data == "A", na.rm = TRUE),
-		T = sum(matrix_data == "T", na.rm = TRUE),
-		C = sum(matrix_data == "C", na.rm = TRUE),
-		G = sum(matrix_data == "G", na.rm = TRUE),
-		R = sum(matrix_data == "R", na.rm = TRUE),
-		Y = sum(matrix_data == "Y", na.rm = TRUE),
-		S = sum(matrix_data == "S", na.rm = TRUE),
-		W = sum(matrix_data == "W", na.rm = TRUE),
-		K = sum(matrix_data == "K", na.rm = TRUE),
-		M = sum(matrix_data == "M", na.rm = TRUE),
-		Failed = sum(matrix_data == "-", na.rm = TRUE)
-	)
-		snp_counts$Hets <- sum(snp_counts$R, snp_counts$Y, snp_counts$S, 
-							   snp_counts$W, snp_counts$K, snp_counts$M)
-		snp_counts$Total <- sum(unlist(snp_counts))
-		
-		return(snp_counts)
+	SNP <- "ATCGRYSWKM-"
+	HETS <- "RYSWM"
+	snp_counts <- sapply(chars(SNP), USE.NAMES = TRUE, function(x) sum(matrix_data == x, na.rm = TRUE))
+	snp_counts[["Hets"]] <- sum(snp_counts[chars(HETS)])
+	snp_counts[["Total"]] <- sum(snp_counts)
+	return(snp_counts)
 }
 
 # allowed_vals_single: Single letter IUPAC values 
 allowed_vals_single <- c("-", "A", "C", "G", "T", "K", "M", "R", "S", "W", "Y")
 
 # allowed_vals_double: Double letter IUPAC values
-	allowed_vals_double <- c("AA", "CC", "GG", "TT", 
-							 "AC", "CA",
-							 "AG", "GA",
-							 "AT", "TA",
-							 "CG", "GC",
-							 "CT", "TC",
-							 "GT", "TG",
-							 "--")
+allowed_vals_double <- c("AA", "CC", "GG", "TT", 
+						 "AC", "CA",
+						 "AG", "GA",
+						 "AT", "TA",
+						 "CG", "GC",
+						 "CT", "TC",
+						 "GT", "TG",
+						 "--")
 
 # iupac_map: Mapping for double-letter IUPAC notation to single-letter notation 
 iupac_map <- c(

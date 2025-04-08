@@ -27,7 +27,7 @@ read_raw_snp_data <- function(file_path, plot = TRUE) {
 	# Check whether "failed" is used for "--/-" and stop immediately
 	if (any(tolower(unique_vals) == "failed")) {
 		message <- paste(
-		    "Error: 'failed' is used in the data instead of the allowed '--' or '-'.\n",
+			"Error: 'failed' is used in the data instead of the allowed '--' or '-'.\n",
 			"This issue may be caused by missing or improperly coded genotype information.\n",
 			"Please check your input data file and ensure that '--' or '-' is used for missing data.\n",
 			"Process cancelled due to invalid data format."
@@ -57,12 +57,9 @@ read_raw_snp_data <- function(file_path, plot = TRUE) {
 		processed_snp_data <- raw_snp_df
 		
 		# Apply the IUPAC map to convert double-letter codes
+		dat <- names(iupac_map)
 		processed_snp_data[,-1] <- apply(processed_snp_data[,-1], c(1,2), function(x) {
-			if (x %in% names(iupac_map)) {
-				return(iupac_map[[x]])
-			} else {
-				return(x) # Keep unchanged if not in the map
-			}
+			ifelse(x %in% dat, iupac_map[[x]], x)
 		})
 		
 		print("Double-letter IUPAC notation detected and converted.")
@@ -91,11 +88,11 @@ read_raw_snp_data <- function(file_path, plot = TRUE) {
 	cat("Number of markers (SNPs):", num_markers, "\n")
 	cat("Number of genotypes (samples):", num_genotypes, "\n")
 	cat("\n--- SNP Call Counts ---\n")
-	cat("A:", snp_summary$A, "T:", snp_summary$T, "C:", snp_summary$C, "G:", snp_summary$G, "\n")
-	cat("R:", snp_summary$R, "Y:", snp_summary$Y, "S:", snp_summary$S, "W:", snp_summary$W, "K:", snp_summary$K, "M:", snp_summary$M, "\n")
-	cat("Heterozygous SNPs:", snp_summary$Hets, "\n")
-	cat("Missing (Failed) Calls:", snp_summary$Failed, "\n")
-	cat("Total SNP Calls:", snp_summary$Total, "\n")
+	cat("A:", snp_summary[["A"]], "T:", snp_summary[["T"]], "C:", snp_summary[["C"]], "G:", snp_summary[["G"]], "\n")
+	cat("R:", snp_summary[["R"]], "Y:", snp_summary[["Y"]], "S:", snp_summary[["S"]], "W:", snp_summary[["W"]], "K:", snp_summary[["K"]], "M:", snp_summary[["M"]], "\n")
+	cat("Heterozygous SNPs:", snp_summary[["Hets"]], "\n")
+	cat("Missing (Failed) Calls:", snp_summary[["-"]], "\n")
+	cat("Total SNP Calls:", snp_summary[["Total"]], "\n")
 	cat("------------------------\n")
 	
 	if (plot) {
