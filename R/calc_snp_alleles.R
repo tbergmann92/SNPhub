@@ -6,7 +6,7 @@
 #'
 #' @return A list containing:
 #' \describe{
-#'	\item{}{A data frame the fraction of polymoprhic, monomoprhic, and failed SNP calls}
+#'	\item{}{A data frame the fraction of polymorphic, monomorphic, and failed SNP calls}
 #'}
 #' @export
 

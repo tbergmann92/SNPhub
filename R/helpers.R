@@ -68,9 +68,9 @@ plot_snp_distribution <- function(snp_counts, output, title) {
 #' @param str A string to be converted into chars
 #' @return A vector of chars
 #' @export
-#' @example
+#' @examples
 #' chars("ATGC")
-#'
+#' # Returns: c("A", "T", "G", "C")
 chars <- function(str) strsplit(str, "")[[1]]
 
 #' Count SNP Calls
