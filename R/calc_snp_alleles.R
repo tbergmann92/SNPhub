@@ -66,11 +66,13 @@ calc_snp_alleles <- function(processed_snp_data) {
 			)
 		)
 		
-	return(list(
-    status = snp_call_stats
+	return(snp_call_stats)
+	
+	#return(list(
+    #status = snp_call_stats
     #allele_a = allele_a,
     #allele_b = allele_b
-	))
+	#))
 	
 }
 

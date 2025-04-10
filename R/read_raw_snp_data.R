@@ -76,32 +76,27 @@ read_raw_snp_data <- function(file_path, plot = TRUE) {
 	# Final check for unrecognized characters
 	check_unrecognized(unique_vals, allowed_vals_single)
 	
-	# Compute basic statistics
-	num_markers <- nrow(processed_snp_data) # Number of SNPs (rows)
-	num_genotypes <- ncol(processed_snp_data) - 1 # Number of genotypes (excluding marker column)
-	
 	# Calculate SNP call statistics
 	snp_summary <- count_snp_calls(as.matrix(processed_snp_data[,-1]))
 	
-	# Print summary information
-	cat("\n--- SNP Data Summary ---\n")
-	cat("Number of markers (SNPs):", num_markers, "\n")
-	cat("Number of genotypes (samples):", num_genotypes, "\n")
-	cat("\n--- SNP Call Counts ---\n")
-	cat("A:", snp_summary[["A"]], "T:", snp_summary[["T"]], "C:", snp_summary[["C"]], "G:", snp_summary[["G"]], "\n")
-	cat("R:", snp_summary[["R"]], "Y:", snp_summary[["Y"]], "S:", snp_summary[["S"]], "W:", snp_summary[["W"]], "K:", snp_summary[["K"]], "M:", snp_summary[["M"]], "\n")
-	cat("Heterozygous SNPs:", snp_summary[["Hets"]], "\n")
-	cat("Missing (Failed) Calls:", snp_summary[["-"]], "\n")
-	cat("Total SNP Calls:", snp_summary[["Total"]], "\n")
-	cat("------------------------\n")
+	# Calculate SNP allele statistics
+	snp_alleles <- calc_snp_alleles(processed_snp_data)
 	
 	if (plot) {
     # Generate plot file path in the same directory
-    plot_file <- file.path(dirname(file_path), sub("\\.csv$", "_snp_distribution.png", basename(file_path)))
+    plot_file <- file.path(dirname(file_path), sub("\\.csv$", "_Snp_Distribution.png", basename(file_path)))
     plot_snp_distribution(snp_summary, output = plot_file, title = "SNP Call Distribution")
     cat("Plot saved to:", plot_file, "\n")
 	}
 	
-	return(list(data = processed_snp_data, summary = snp_summary))
+	# Create the S3 object using the create_snphub_object function
+	snp_object <- create_snphub_object(
+		snp_data = processed_snp_data,
+		snp_summary = snp_summary,
+		snp_alleles = snp_alleles,
+		output_dir = dirname(file_path)
+	)
+	
+	return(snp_object)
 
 }
