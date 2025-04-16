@@ -14,7 +14,7 @@
 #source("helpers.R")
 
 calc_snp_alleles <- function(processed_snp_data) {
-	
+
 	allele_a <- c()
 	allele_b <- c()
 	pol_counter <- 0
@@ -22,21 +22,18 @@ calc_snp_alleles <- function(processed_snp_data) {
 	fail_counter <- 0
 	
 	# List to remove Hets and failed calls
-	to_remove <- c("R", "Y", "S", "W", "K", "M", "H", "-")
-	
+	to_remove <- chars("RYSWKMH-")
+
 	# Apply function across rows
 	apply(processed_snp_data, 1, function(snps) {
 		snps <- as.character(snps[-1]) # Skip first column (marker names)
-		#print(str(snps))
-		
+
 		# Get unique alleles in order of appearance (order of appearance is important!)
 		unique_snps <- unique(snps)
-		#print(unique_snps)
 		
 		# Discard Hets and failed calls (logic is about to only count the "main" SNP calls
 		main_snps <- unique_snps[!unique_snps %in% to_remove]
-		#print(main_snps)
-			
+
 		if (length(main_snps) == 2) {
 			allele_a <<- c(allele_a, main_snps[1])
 			allele_b <<- c(allele_b, main_snps[2])
@@ -49,14 +46,11 @@ calc_snp_alleles <- function(processed_snp_data) {
 			allele_a <<- c(allele_a, NA)
 			allele_b <<- c(allele_b, NA)
 			fail_counter <<- fail_counter + 1
-		}	
+		}
 	})
-	
+
 	total_markers <- nrow(processed_snp_data[,-1])
-	
-	# Move to helpers.R
-	calc_percent <- function(count, total) round((count/total) * 100, 2)
-	
+
 	snp_call_stats <- data.frame(
 		Type = c("Polymorphic", "Monomorphic", "Failed"),
 		Fraction = c(
@@ -65,14 +59,7 @@ calc_snp_alleles <- function(processed_snp_data) {
 			calc_percent(fail_counter, total_markers)
 			)
 		)
-		
+
 	return(snp_call_stats)
-	
-	#return(list(
-    #status = snp_call_stats
-    #allele_a = allele_a,
-    #allele_b = allele_b
-	#))
-	
 }
 

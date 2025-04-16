@@ -15,6 +15,14 @@ check_unrecognized <- function(unique_vals, allowed_vals) {
 	}
 }
 
+#'Calculate percentage
+#'
+#' @param count Numerical value
+#' @param total Maximum value
+#'
+#' @export
+calc_percent <- function(count, total) round((count/total) * 100, 2)
+
 #'Plot SNP Call Distribution
 #'
 #' @param snp_counts A named list with SNP call counts

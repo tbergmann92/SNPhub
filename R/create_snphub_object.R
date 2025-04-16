@@ -34,6 +34,5 @@ snp_summary <- function(x, ...) {
 	cat("------------------------\n")
 	if (!is.null(x$output_dir)) {
 		cat("Output saved to:", x$output_dir, "\n")
-  }
-}	
-		
+	}
+}
