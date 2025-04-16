@@ -19,10 +19,10 @@ read_raw_snp_data <- function(file_path, plot = TRUE) {
 	
 	# Function to import, check and convert raw SNP data into correct format
 	
-	raw_snp_df <- read.csv(file_path, sep = ",", quote = "")
+	raw_snp_df <- read.csv(file_path, sep = ",", quote = "")[, -1]
 
-	# Extract the unique values and exclude first row with marker names
-	unique_vals <- unique(as.vector(as.matrix(raw_snp_df[,-1])))
+	# Extract the unique values
+	unique_vals <- unique(as.vector(as.matrix(raw_snp_df)))
 
 	# Check whether "failed" is used for "--/-" and stop immediately
 	if (any(tolower(unique_vals) == "failed")) {
@@ -58,7 +58,7 @@ read_raw_snp_data <- function(file_path, plot = TRUE) {
 		
 		# Apply the IUPAC map to convert double-letter codes
 		dat <- names(iupac_map)
-		processed_snp_data[,-1] <- apply(processed_snp_data[,-1], c(1,2), function(x) {
+		processed_snp_data <- apply(processed_snp_data, c(1,2), function(x) {
 			ifelse(x %in% dat, iupac_map[[x]], x)
 		})
 		
@@ -71,13 +71,13 @@ read_raw_snp_data <- function(file_path, plot = TRUE) {
 	}
 	
 	# Extract the unique values once again
-	unique_vals <- unique(as.vector(as.matrix(processed_snp_data[,-1])))
+	unique_vals <- unique(as.vector(as.matrix(processed_snp_data)))
 	
 	# Final check for unrecognized characters
 	check_unrecognized(unique_vals, allowed_vals_single)
 	
 	# Calculate SNP call statistics
-	snp_summary <- count_snp_calls(as.matrix(processed_snp_data[,-1]))
+	snp_summary <- count_snp_calls(as.matrix(processed_snp_data))
 	
 	# Calculate SNP allele statistics
 	snp_alleles <- calc_snp_alleles(processed_snp_data)
