@@ -84,7 +84,7 @@ read_raw_snp_data <- function(file_path, plot = TRUE) {
 	
 	if (plot) {
     # Generate plot file path in the same directory
-    plot_file <- file.path(dirname(file_path), sub("\\.csv$", "_Snp_Distribution.png", basename(file_path)))
+    plot_file <- file.path(dirname(file_path), sub("\\.csv$", "_SNP_Distribution.png", basename(file_path)))
     plot_snp_distribution(snp_summary, output = plot_file, title = "SNP Call Distribution")
     cat("Plot saved to:", plot_file, "\n")
 	}

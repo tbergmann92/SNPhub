@@ -56,7 +56,7 @@ plot_snp_distribution <- function(snp_counts, output, title) {
         ylim = c(0, 100),
         ylab = "Fraction [%]",
         main = title,
-        las = 2 # Rotate x-axis labels for better readability
+        las = 1 # Rotate x-axis labels for better readability
     )
 
     # Add text labels on top of bars
