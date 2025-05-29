@@ -5,10 +5,14 @@
 #'
 #' @param file_path Path to the CSV file containing SNP data. 
 #'
-#' @return A list containing:
+#' @return An S3 object containing:
 #' \describe{
-#'	\item{data}{A data frame with processed SNP data using single-letter IUPAC notation}
-#'	\item{summary}{A list of SNP call counts}
+#'	\item{snp_data}{A data frame with SNP data converted to single-letter IUPAC notation}
+#'	\item{snp_summary}{A named integer vector of SNP call counts}
+#'  \item{marker_status}{A data frame with the fraction of polymorphic, monomorphic, and failed markers}
+#'  \item{allele_df}{A data frame with allele information for each marker}
+#'  \item{marker_names}{A character vector containing the names of all markers}
+#'  \item{output_dir}{The output directory to which data and figures are exported}
 #'}
 #' @export
 
@@ -20,6 +24,10 @@ read_raw_snp_data <- function(file_path, plot = TRUE) {
 	# Function to import, check and convert raw SNP data into correct format
 	
 	raw_snp_df <- read.csv(file_path, sep = ",", quote = "")[, -1]
+	
+	# Extract the marker names (first column) and assign them as rownames
+	marker_names <- read.csv(file_path, sep = ",", quote = "")[[1]]
+	rownames(raw_snp_df) <- marker_names
 
 	# Extract the unique values
 	unique_vals <- unique(as.vector(as.matrix(raw_snp_df)))
@@ -79,21 +87,33 @@ read_raw_snp_data <- function(file_path, plot = TRUE) {
 	# Calculate SNP call statistics
 	snp_summary <- count_snp_calls(as.matrix(processed_snp_data))
 	
-	# Calculate SNP allele statistics
-	snp_alleles <- calc_snp_alleles(processed_snp_data)
-	
+	# Calculate SNP allele statistics and get allele data frame
+	allele_results <- calc_allelic_status(processed_snp_data)
+	marker_status <- allele_results$marker_allele_stats
+	allele_df <- allele_results$allele_df
+
 	if (plot) {
-    # Generate plot file path in the same directory
-    plot_file <- file.path(dirname(file_path), sub("\\.csv$", "_SNP_Distribution.png", basename(file_path)))
-    plot_snp_distribution(snp_summary, output = plot_file, title = "SNP Call Distribution")
-    cat("Plot saved to:", plot_file, "\n")
+    # Generate SNP distribution plot
+    barplot_snp_file <- file.path(dirname(file_path), sub("\\.csv$", "_SNP_Distribution.png", basename(file_path)))
+    plot_snp_distribution(snp_summary, output = barplot_snp_file, title = "SNP Call Distribution")
+    cat("Plot saved to:", barplot_snp_file, "\n")
+	# Generate Nei_H vs PIC boxplots
+	boxplot_snp_file <- file.path(dirname(file_path), sub("\\.csv$", "_Nei_PIC_Boxplot.png", basename(file_path)))
+	plot_nei_pic_boxplot(allele_df, output = boxplot_snp_file, title = "Nei's vs PIC")
+	cat("Plot saved to:", boxplot_snp_file, "\n")
+	# Generate marker status barplots
+	barplot_marker_file <- file.path(dirname(file_path), sub("\\.csv$", "_Marker_Status_Boxplot.png", basename(file_path)))
+	plot_marker_status(marker_status, output = barplot_marker_file, title = "Marker Statistics")
+	cat("Plot saved to:", barplot_marker_file, "\n")
 	}
 	
 	# Create the S3 object using the create_snphub_object function
 	snp_object <- create_snphub_object(
 		snp_data = processed_snp_data,
 		snp_summary = snp_summary,
-		snp_alleles = snp_alleles,
+		marker_status = marker_status,
+		allele_df = allele_df,
+		marker_names = marker_names,
 		output_dir = dirname(file_path)
 	)
 	

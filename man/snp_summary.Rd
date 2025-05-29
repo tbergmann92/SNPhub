@@ -6,6 +6,9 @@
 \usage{
 snp_summary(x, ...)
 }
+\arguments{
+\item{x}{The S3 objectcreated by read_raw_snp_data()}
+}
 \description{
 Print Method for SNP Stats
 }

@@ -10,10 +10,14 @@ read_raw_snp_data(file_path, plot = TRUE)
 \item{file_path}{Path to the CSV file containing SNP data.}
 }
 \value{
-A list containing:
+An S3 object containing:
 \describe{
-\item{data}{A data frame with processed SNP data using single-letter IUPAC notation}
-\item{summary}{A list of SNP call counts}
+\item{snp_data}{A data frame with SNP data converted to single-letter IUPAC notation}
+\item{snp_summary}{A named integer vector of SNP call counts}
+\item{marker_status}{A data frame with the fraction of polymorphic, monomorphic, and failed markers}
+\item{allele_df}{A data frame with allele information for each marker}
+\item{marker_names}{A character vector containing the names of all markers}
+\item{output_dir}{The output directory to which data and figures are exported}
 }
 }
 \description{

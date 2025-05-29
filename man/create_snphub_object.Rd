@@ -7,8 +7,10 @@
 create_snphub_object(
   snp_data,
   snp_summary,
-  snp_alleles = NULL,
-  output_dir = NULL
+  marker_status = NULL,
+  output_dir = NULL,
+  marker_names = NULL,
+  allele_df = NULL
 )
 }
 \arguments{
