@@ -188,8 +188,8 @@ calc_polymorphism <- function(df) {
 #' Calculates Nei's genetic diversity (expected heterozygosity, He) and the
 #' Polymorphism Information Content (PIC) for each marker
 #'
-#' @param p
-#' @param q
+#' @param p Allele frequency of allele A
+#' @param q Allele frequencey of allele B
 #' @param method filter method to apply on given marker
 #'
 #' @return Numerical value of the informativeness of genetic marker based on the selected method
