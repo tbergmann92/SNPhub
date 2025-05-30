@@ -1,14 +1,5 @@
 # Analysis Functions for SNPhub
 
-#'Calculate percentage
-#'
-#' @param count Numerical value
-#' @param total Maximum value
-#'
-#' @export
-
-calc_percent <- function(count, total) round((count/total) * 100, 2)
-
 #' Count SNP Calls
 #'
 #' Takes a matrix of single-letter SNP calls and counts the frequency of each type.
