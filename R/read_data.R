@@ -22,12 +22,7 @@
 read_raw_snp_data <- function(file_path, plot = TRUE) {
 	
 	# Function to import, check and convert raw SNP data into correct format
-	
-	raw_snp_df <- read.csv(file_path, sep = ",", quote = "")[, -1]
-	
-	# Extract the marker names (first column) and assign them as rownames
-	marker_names <- read.csv(file_path, sep = ",", quote = "")[[1]]
-	rownames(raw_snp_df) <- marker_names
+	raw_snp_df <- read.csv(file_path, sep = ",", quote = "", row.names = 1)
 
 	# Extract the unique values
 	unique_vals <- unique(as.vector(as.matrix(raw_snp_df)))
@@ -111,7 +106,7 @@ read_raw_snp_data <- function(file_path, plot = TRUE) {
 		snp_summary = snp_summary,
 		marker_stats = marker_stats,
 		allele_df = allele_df,
-		marker_names = marker_names,
+		marker_names = rownames(raw_snp_df),
 		output_dir = dirname(file_path)
 	)
 	
