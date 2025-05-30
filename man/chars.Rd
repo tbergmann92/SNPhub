@@ -2,7 +2,7 @@
 % Please edit documentation in R/helpers.R
 \name{chars}
 \alias{chars}
-\title{Convert string to individual chars}
+\title{Convert string to individual characters}
 \usage{
 chars(str)
 }
@@ -10,10 +10,10 @@ chars(str)
 \item{str}{A string to be converted into chars}
 }
 \value{
-A vector of chars
+A vector of characters
 }
 \description{
-Convert string to individual chars
+Convert string to individual characters
 }
 \examples{
 chars("ATGC")

@@ -1,19 +1,48 @@
+# Analysis Functions for SNPhub
+
+#'Calculate percentage
+#'
+#' @param count Numerical value
+#' @param total Maximum value
+#'
+#' @export
+
+calc_percent <- function(count, total) round((count/total) * 100, 2)
+
+#' Count SNP Calls
+#'
+#' Takes a matrix of single-letter SNP calls and counts the frequency of each type.
+#'
+#' @param matrix_data A character matrix with SNP genotypes.
+#' @return A named list with counts for each SNP type, heterozygous calls, and missing data.
+#' @export
+
+count_snp_calls <- function(matrix_data) {
+	SNP <- "ATCGRYSWKM-"
+	HETS <- "RYSWM"
+	snp_counts <- sapply(chars(SNP), USE.NAMES = TRUE, function(x) sum(matrix_data == x, na.rm = TRUE))
+	snp_counts[["Hets"]] <- sum(snp_counts[chars(HETS)])
+	snp_counts[["Total"]] <- sum(snp_counts)
+	return(snp_counts)
+}
+
 #' Analyse Allelic Status of SNPs 
 #'
 #' This function checks whether a SNP call is bi-allelic (polymorphic), monomorphic, or completely failed.
+#' It summarizes allele counts for each SNP and calculates the frequencies.
+#' It invokes the calc_polymorphism() function and generates the allele_df frame.
+#' The allele_df data frame contains all essential information about each marker.
 #'
 #' @param processed_snp_data SNP data frame that has been converted to single-letter IUPAC by read_raw_snp_data(). 
 #'
 #' @return A list containing:
 #' \describe{
 #'	\item{}{A data frame the fraction of polymorphic, monomorphic, and failed SNP calls}
+#'	\item{}{The allele_df data frame that contains all essential marker metrics}
 #'}
 #' @export
 
-# Load helper functions and variables
-#source("helpers.R")
-
-calc_allelic_status <- function(processed_snp_data) {
+calc_allelic_stats <- function(processed_snp_data) {
 
 	allele_a <- c()
 	allele_b <- c()
@@ -117,4 +146,50 @@ calc_allelic_status <- function(processed_snp_data) {
 				allele_df = allele_df
 	))
 	
+}
+
+#' Determining the Informativeness of a Marker 
+#'
+#' Calculates Nei's genetic diversity (expected heterozygosity, He) and the
+#' Polymorphism Information Content (PIC) for each marker
+#'
+#' @param allele_df Data frame with allele count columns and frequencies for each marker 
+#'
+#' @return A modified version of the input data frame with three new columns:
+#' \itemize{
+#'	\item \code{Nei_H}:Nei's genetic diveristy (expected heterozgosity)
+#'  \item \code{PIC}: Polymorphism Information Content
+#'  \item \code{MAF}: Minor Allele Frequency (only for polymorphic markers)
+#' }
+#'
+#' @export
+
+calc_polymorphism <- function(df) {
+	
+	# Summarise the total calls
+	total_calls <- df$Allele_A_Count + df$Allele_B_Count + df$Allele_AB_Count
+	
+	# Compute the corrected (total) allele frequencies using AB as half to A and to B
+	p = (df$Allele_A_Count + 0.5 * df$Allele_AB_Count) / total_calls
+	q = (df$Allele_B_Count + 0.5 * df$Allele_AB_Count) / total_calls
+	
+	# Nei's H: expected heterozygosity
+	H <- round((1 - (p^2 + q^2)), digits=3)
+	
+	# PIC for biallelic markers (Botstein, 1980)
+	PIC <- round(1 - (p^2 + q^2) - 2 * (p^2) * (q^2), digits = 3)
+	
+	# MAF: minor allele frequency
+	MAF <- round(pmin(p, q), 3)
+	
+	# Assign and mask failed sites
+	df$Nei_H <- H
+	df$Nei_H[df$Failed_Freq == 1 | is.nan(H)] <- NA
+	
+	df$PIC <- PIC
+	df$PIC[df$Failed_Freq == 1 | is.nan(PIC)] <- NA
+	
+	df$MAF <- ifelse(df$Status == "Pol", round(MAF, 3), NA)
+	
+	return(df)
 }
