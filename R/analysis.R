@@ -165,13 +165,13 @@ calc_polymorphism <- function(df) {
 	q = (df$Allele_B_Count + 0.5 * df$Allele_AB_Count) / total_calls
 	
 	# Nei's H: expected heterozygosity
-	H <- round((1 - (p^2 + q^2)), digits=3)
+	H <- filter_method(p, q, "H")
 	
 	# PIC for biallelic markers (Botstein, 1980)
-	PIC <- round(1 - (p^2 + q^2) - 2 * (p^2) * (q^2), digits = 3)
+	PIC <- filter_method(p, q, "PIC")
 	
 	# MAF: minor allele frequency
-	MAF <- round(pmin(p, q), 3)
+	MAF <- filter_method(p, q, "MAF")
 	
 	# Assign and mask failed sites
 	df$Nei_H <- H
@@ -180,7 +180,24 @@ calc_polymorphism <- function(df) {
 	df$PIC <- PIC
 	df$PIC[df$Failed_Freq == 1 | is.nan(PIC)] <- NA
 	
-	df$MAF <- ifelse(df$Status == "Pol", round(MAF, 3), NA)
+	df$MAF <- ifelse(df$Status == "Pol", MAF, NA)
 	
 	return(df)
+}
+
+#' Calculates Nei's genetic diversity (expected heterozygosity, He) and the
+#' Polymorphism Information Content (PIC) for each marker
+#'
+#' @param p
+#' @param q
+#' @param method filter method to apply on given marker
+#'
+#' @return Numerical value of the informativeness of genetic marker based on the selected method
+#'
+#' @export
+filter_method <- function(p, q, method){
+	switch(method,
+		   "H" = round(1 - (p^2 + q^2), digits = 3), 						# Nei's H: expected heterozygosity
+		   "PIC" = round(1 - (p^2 + q^2) - 2 * (p^2) * (q^2), digits = 3),  # PIC for biallelic markers (Botstein, 1980)
+		   "MAF" = round(pmin(p, q), 3)) 									# MAF: minor allele frequency
 }
