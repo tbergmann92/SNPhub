@@ -36,3 +36,12 @@ calc_percent <- function(count, total) round((count/total) * 100, 2)
 #' # Returns: c("A", "T", "G", "C")
 
 chars <- function(str) strsplit(ifelse(is.na(str), "", str), "")[[1]]
+
+#' Function to assert a set of conditions
+#' @param statement vector of comparison to proof
+#' @param err_message string of error message when not all comparison are TRUE
+#' @return character string used as error message or nothing if all TRUE
+#' @keywords internal
+assert <- function(statement, err_message = NULL) {
+    if (!all(statement)) stop(err_message)
+}

@@ -196,6 +196,7 @@ calc_polymorphism <- function(df) {
 #'
 #' @export
 filter_method <- function(p, q, method){
+	assert(method %in% c("H", "PIC", "MAF"), "Formula not supported. Please choose 'H', 'PIC' or 'MAF'.")
 	switch(method,
 		   "H" = round(1 - (p^2 + q^2), digits = 3), 						# Nei's H: expected heterozygosity
 		   "PIC" = round(1 - (p^2 + q^2) - 2 * (p^2) * (q^2), digits = 3),  # PIC for biallelic markers (Botstein, 1980)

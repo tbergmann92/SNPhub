@@ -18,3 +18,15 @@ test_that("chars() works", {
     expect_identical(chars(c("ATG", NA)), c("A", "T", "G"))
     expect_type(chars("ATG"), "character")
 })
+
+test_that("assert() works", {
+    expect_no_error(assert(2 == 2))
+    expect_no_error(assert(NULL))
+    expect_no_error(assert(c(1 == 1, 2 == 2)))
+    expect_error(assert(c(1 == 1, 1 == 2)))
+    expect_error(assert())
+    expect_error(assert(NA))
+    expect_error(assert(1 == 2))
+    expect_error(assert(1 == 2, "error"))
+    expect_error(assert(c(2 == 2, 2 == 3), "error"), "error")
+})
