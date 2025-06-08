@@ -22,10 +22,10 @@
 read_raw_snp_data <- function(file_path, plot = TRUE) {
 	
 	# Function to import, check and convert raw SNP data into correct format
-	raw_snp_df <- read.csv(file_path, sep = ",", quote = "", row.names = 1)
+	raw_snp_df <- as.matrix(read.csv(file_path, sep = ",", quote = "", row.names = 1))
 
 	# Extract the unique values
-	unique_vals <- unique(as.vector(as.matrix(raw_snp_df)))
+	unique_vals <- unique(raw_snp_df)
 
 	# Check whether "failed" is used for "--/-" and stop immediately
 	if (any(tolower(unique_vals) == "failed")) {
@@ -55,33 +55,29 @@ read_raw_snp_data <- function(file_path, plot = TRUE) {
 	# If double-letter notation is detected, check characters and then convert it to single-letter notation
 	else if (double_letter > 0 & single_letter == 0) {
 		check_unrecognized(unique_vals, allowed_vals_double)
-				
-		# Create a copy of the raw data for processing
-		processed_snp_data <- raw_snp_df
-		
+
 		# Apply the IUPAC map to convert double-letter codes
-		dat <- names(iupac_map)
-		processed_snp_data <- apply(processed_snp_data, c(1,2), function(x) {
-			ifelse(x %in% dat, iupac_map[[x]], x)
-		})
-		
+		# First check if matrix values are in iupac_map, if so, mark only those for replacement - replace
+		in_iupac_snps <- raw_snp_df %in% names(iupac_map)
+		raw_replaced <- raw_snp_df
+		raw_replaced[in_iupac_snps] <- as.character(iupac_map[as.character(raw_snp_df[in_iupac_snps])])
+		processed_snp_data <- raw_replaced
+
 		print("Double-letter IUPAC notation detected and converted.")
-			
+
 	} else if (double_letter == 0 & single_letter > 0) {
 		# If only single-letter IUPAC notation is detected, return the raw data
 		print("Single-letter IUPAC notation detected.")
 		processed_snp_data <- raw_snp_df
 	}
-	
-	# Extract the unique values once again
-	unique_vals <- unique(as.vector(as.matrix(processed_snp_data)))
-	
+
 	# Final check for unrecognized characters
-	check_unrecognized(unique_vals, allowed_vals_single)
-	
+	# TODO: checking matrix twice should be avoided
+	check_unrecognized(unique(processed_snp_data), allowed_vals_single)
+
 	# Calculate SNP call statistics
-	snp_summary <- count_snp_calls(as.matrix(processed_snp_data))
-	
+	snp_summary <- count_snp_calls(processed_snp_data)
+
 	# Calculate SNP allele statistics and get allele data frame
 	allele_results <- calc_allelic_stats(processed_snp_data)
 	marker_stats <- allele_results$marker_allele_stats
