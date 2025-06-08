@@ -4,8 +4,6 @@
 #'
 #' @param unique_vals Vector of unique SNP values from the matrix
 #' @param allowed_vals Vector of allowed characters
-#'
-#' @export
 
 check_unrecognized <- function(unique_vals, allowed_vals) {
 	unrecognized_chars <- unique_vals[!unique_vals %in% allowed_vals]
@@ -20,8 +18,6 @@ check_unrecognized <- function(unique_vals, allowed_vals) {
 #'
 #' @param count Numerical value
 #' @param total Maximum value
-#'
-#' @export
 
 calc_percent <- function(count, total) round((count/total) * 100, 2)
 
@@ -30,7 +26,6 @@ calc_percent <- function(count, total) round((count/total) * 100, 2)
 #' @param str A string to be converted into chars
 #' @return A vector of characters
 #'
-#' @export
 #' @examples
 #' chars("ATGC")
 #' # Returns: c("A", "T", "G", "C")
