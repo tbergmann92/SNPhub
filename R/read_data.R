@@ -57,11 +57,7 @@ read_raw_snp_data <- function(file_path, plot = FALSE) {
 		check_unrecognized(unique_vals, allowed_vals_double)
 
 		# Apply the IUPAC map to convert double-letter codes
-		# First check if matrix values are in iupac_map, if so, mark only those for replacement - replace
-		in_iupac_snps <- raw_snp_df %in% names(iupac_map)
-		raw_replaced <- raw_snp_df
-		raw_replaced[in_iupac_snps] <- as.character(iupac_map[as.character(raw_snp_df[in_iupac_snps])])
-		processed_snp_data <- raw_replaced
+		processed_snp_data <- remap_snps(raw_snp_df, iupac_map)
 
 		print("Double-letter IUPAC notation detected and converted.")
 

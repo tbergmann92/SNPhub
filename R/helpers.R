@@ -45,3 +45,17 @@ chars <- function(str) strsplit(ifelse(is.na(str), "", str), "")[[1]]
 assert <- function(statement, err_message = NULL) {
     if (!all(statement)) stop(err_message)
 }
+
+#' Function to replace SNPs values of an matrix by a named vector
+#' @param mat original matrix
+#' @param remap_list named vector of SNPs to replace the original matrix values with
+#' @keywords internal
+#' @example
+#' remap_snps(matrix(c("AA", "AG", "--", "GG"), ncol = 2), c("AA" = "A"))
+#' # Returns: matrix(c("A", "AG", "--", "GG"), ncol = 2)
+remap_snps <- function(mat, remap_list) {
+	# First check if matrix values are in remap_list, if so, mark only those for replacement - replace
+	in_remap_list <- mat %in% names(remap_list)
+	mat[in_remap_list] <- as.character(remap_list[as.character(mat[in_remap_list])])
+	return(mat)
+}
