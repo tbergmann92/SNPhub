@@ -19,7 +19,7 @@
 # Load helper functions and variables
 #source("helpers.R")
 
-read_raw_snp_data <- function(file_path, plot = TRUE) {
+read_raw_snp_data <- function(file_path, plot = FALSE) {
 	
 	# Function to import, check and convert raw SNP data into correct format
 	raw_snp_df <- as.matrix(read.csv(file_path, sep = ",", quote = "", row.names = 1))
