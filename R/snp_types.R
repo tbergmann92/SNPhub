@@ -26,14 +26,14 @@ allowed_vals_single <- c("-", "A", "C", "G", "T", "K", "M", "R", "S", "W", "Y")
 #'
 
 allowed_vals_double <- c("AA", "CC",
-						 "GG", "TT",
-						 "AC", "CA",
-						 "AG", "GA",
-						 "AT", "TA",
-						 "CG", "GC",
-						 "CT", "TC",
-						 "GT", "TG",
-						 "--")
+                         "GG", "TT",
+                         "AC", "CA",
+                         "AG", "GA",
+                         "AT", "TA",
+                         "CG", "GC",
+                         "CT", "TC",
+                         "GT", "TG",
+                         "--")
 
 #' IUPAC conversion table (double-letter to single-letter)
 #'
@@ -49,13 +49,13 @@ allowed_vals_double <- c("AA", "CC",
 #'
  
 iupac_map <- c(
-	"AA" = "A", "CC" = "C", 
-	"GG" = "G", "TT" = "T",
-	"AC" = "M", "CA" = "M",
-	"AG" = "R", "GA" = "R",
-	"AT" = "W", "TA" = "W",
-	"CG" = "S", "GC" = "S",
-	"CT" = "Y", "TC" = "Y",
-	"GT" = "K", "TG" = "K",
-	"--" = "-"
+    "AA" = "A", "CC" = "C",
+    "GG" = "G", "TT" = "T",
+    "AC" = "M", "CA" = "M",
+    "AG" = "R", "GA" = "R",
+    "AT" = "W", "TA" = "W",
+    "CG" = "S", "GC" = "S",
+    "CT" = "Y", "TC" = "Y",
+    "GT" = "K", "TG" = "K",
+    "--" = "-"
 )

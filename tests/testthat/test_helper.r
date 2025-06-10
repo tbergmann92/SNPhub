@@ -36,5 +36,4 @@ test_that("remap_snps() works", {
     mat2 <- matrix(c("AA", "AG", "--", "FF"), ncol = 2)
     expect_equal(remap_snps(mat, iupac_map),  matrix(c("A", "R", "-", "G"), ncol = 2))
     expect_equal(remap_snps(mat2, iupac_map),  matrix(c("A", "R", "-", "FF"), ncol = 2))
-
 })
