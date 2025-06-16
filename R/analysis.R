@@ -46,9 +46,9 @@ calc_allelic_stats <- function(processed_snp_data) {
 	allele_b_freq <- c()
 	allele_ab_freq <- c()
 	failed_freq <- c()
-	pol_counter <- 0
-	mon_counter <- 0
-	fail_counter <- 0
+	pol_counter <- 0L
+	mon_counter <- 0L
+	fail_counter <- 0L
 	pic_values <- c()
 	
 	# List to remove Hets and failed calls
