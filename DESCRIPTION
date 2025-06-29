@@ -1,10 +1,10 @@
 Package: SNPhub
 Title: A versatile platform for SNP chip data analysis
 Version: 0.0.0.9000
-Authors@R: 
-    person("Thomas", "Bergmann", "tom.com23@gmx.de", role = c("aut", "cre")),
-	person("Markus", "Schemmel", role = "ctr"),
-	person("Mario", "Hasler", role = "ctr")
+Authors@R: c(
+    person("Thomas", "Bergmann", role = c("aut", "cre"), email = "tom.com23@gmx.de"),
+    person("Markus", "Schemmel", role = "ctr"),
+    person("Mario", "Hasler", role = "ctr"))
 Description: A package for reading, processing, and analyzing SNP chip data.
 License: `use_mit_license()`, `use_gpl3_license()` or friends to pick a
     license
