@@ -4,6 +4,7 @@
 #'
 #' @param unique_vals Vector of unique SNP values from the matrix
 #' @param allowed_vals Vector of allowed characters
+#' @keywords internal
 
 check_unrecognized <- function(unique_vals, allowed_vals) {
   unrecognized_chars <- unique_vals[!unique_vals %in% allowed_vals]
@@ -18,6 +19,7 @@ check_unrecognized <- function(unique_vals, allowed_vals) {
 #'
 #' @param count Numerical value
 #' @param total Maximum value
+#' @keywords internal
 
 calc_percent <- function(count, total) round((count / total) * 100, 2)
 
@@ -26,9 +28,10 @@ calc_percent <- function(count, total) round((count / total) * 100, 2)
 #' @param str A string to be converted into chars
 #' @return A vector of characters
 #'
-#' @examples
+#' @example
 #' chars("ATGC")
-#' # Returns: c("A", "T", "G", "C")
+#' @returns single letter of string
+#' @keywords internal
 chars <- function(str) strsplit(ifelse(is.na(str), "", str), "")[[1]]
 
 #' Function to assert a set of conditions
@@ -44,9 +47,9 @@ assert <- function(statement, err_message = NULL) {
 #' @param mat original matrix
 #' @param remap_list named vector of SNPs to replace the original matrix values with
 #' @keywords internal
-#' @examples
+#' @example
 #' remap_snps(matrix(c("AA", "AG", "--", "GG"), ncol = 2), c("AA" = "A"))
-#' # Returns: matrix(c("A", "AG", "--", "GG"), ncol = 2)
+#' @returns: matrix(c("A", "AG", "--", "GG"), ncol = 2)
 remap_snps <- function(mat, remap_list) {
   # First check if matrix values are in remap_list, if so, mark only those for replacement - replace
   in_remap_list <- mat %in% names(remap_list)

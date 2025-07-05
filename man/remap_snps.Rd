@@ -11,11 +11,10 @@ remap_snps(mat, remap_list)
 
 \item{remap_list}{named vector of SNPs to replace the original matrix values with}
 }
+\value{
+: matrix(c("A", "AG", "--", "GG"), ncol = 2)
+}
 \description{
 Function to replace SNPs values of an matrix by a named vector
-}
-\examples{
-remap_snps(matrix(c("AA", "AG", "--", "GG"), ncol = 2), c("AA" = "A"))
-# Returns: matrix(c("A", "AG", "--", "GG"), ncol = 2)
 }
 \keyword{internal}

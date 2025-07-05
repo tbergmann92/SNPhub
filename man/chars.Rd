@@ -11,11 +11,10 @@ chars(str)
 }
 \value{
 A vector of characters
+
+single letter of string
 }
 \description{
 Convert string to individual characters
 }
-\examples{
-chars("ATGC")
-# Returns: c("A", "T", "G", "C")
-}
+\keyword{internal}

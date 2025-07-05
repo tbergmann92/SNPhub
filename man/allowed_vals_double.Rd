@@ -6,19 +6,15 @@
 \title{Allowed double-letter IUPAC}
 \format{
 A character vector with 17 elements
+
+"AA" = Adenine, "CC" = Cytosine, "GG" = Guanine, "TT" = Thymine
+"K" = GT|TG, "M" = AC|CA, "R" = AG|GA, "S" = GC|CG, "W" = AT|TA, "Y" = CT|TC
+"--" = missing data
 }
 \usage{
 allowed_vals_double
 }
 \description{
 A character vector containing the valid double-letter IUPAC
-}
-\examples{
-allowed_vals_double 
-
-"AA" = Adenine, "CC" = Cytosine, "GG" = Guanine, "TT" = Thymine
-"K" = GT|TG, "M" = AC|CA, "R" = AG|GA, "S" = GC|CG, "W" = AT|TA, "Y" = CT|TC
-"--" = missing data
-
 }
 \keyword{datasets}
