@@ -17,9 +17,4 @@ corresponding single-letter codes
 \details{
 Used during genotype standardization in 'read_raw_snp_data()'
 }
-\examples{
-iupac_map[["AG"]] 
-# Returns "R"
-
-}
 \keyword{datasets}

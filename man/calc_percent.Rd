@@ -14,3 +14,4 @@ calc_percent(count, total)
 \description{
 Calculate percentage
 }
+\keyword{internal}

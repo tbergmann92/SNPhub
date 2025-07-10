@@ -14,3 +14,4 @@ check_unrecognized(unique_vals, allowed_vals)
 \description{
 Check for unrecognized SNP values
 }
+\keyword{internal}
