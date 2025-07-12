@@ -6,15 +6,19 @@
 \title{Allowed single-letter IUPAC codes}
 \format{
 A character vector with 11 elements
-
-"A" = Adenine, "C" = Cytosine, "G" = Guanine, "T" = Thymine
-"K" = G/T, "M" = A/C, "R" = A/G, "S" = G/C, "W" = A/T, "Y" = C/T
-"-" = missing data
 }
 \usage{
 allowed_vals_single
 }
 \description{
 A character vector containing all valid single-letter IUPAC nucleotide codes
+}
+\examples{
+allowed_vals_single 
+
+"A" = Adenine, "C" = Cytosine, "G" = Guanine, "T" = Thymine
+"K" = G/T, "M" = A/C, "R" = A/G, "S" = G/C, "W" = A/T, "Y" = C/T
+"-" = missing data
+
 }
 \keyword{datasets}

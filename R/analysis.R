@@ -28,8 +28,8 @@ count_snp_calls <- function(matrix_data) {
 #'
 #' @return A list containing:
 #' \describe{
-#'  \item{}{A data frame the fraction of polymorphic, monomorphic, and failed SNP calls}
-#'  \item{}{The allele_df data frame that contains all essential marker metrics}
+#' 	\item{}{A data frame the fraction of polymorphic, monomorphic, and failed SNP calls}
+#' 	\item{}{The allele_df data frame that contains all essential marker metrics}
 #' }
 #' @export
 
@@ -66,32 +66,32 @@ calc_allelic_stats <- function(processed_snp_data) {
 
     # Identify the main alleles for each marker
     if (length(main_snps) == 2) {
-      allele_a <- c(allele_a, main_snps[1])
-      allele_b <- c(allele_b, main_snps[2])
-      pol_counter <- pol_counter + 1
+      allele_a <<- c(allele_a, main_snps[1])
+      allele_b <<- c(allele_b, main_snps[2])
+      pol_counter <<- pol_counter + 1
     } else if (length(main_snps) == 1) {
-      allele_a <- c(allele_a, main_snps[1])
-      allele_b <- c(allele_b, NA)
-      mon_counter <- mon_counter + 1
+      allele_a <<- c(allele_a, main_snps[1])
+      allele_b <<- c(allele_b, NA)
+      mon_counter <<- mon_counter + 1
     } else {
-      allele_a <- c(allele_a, NA)
-      allele_b <- c(allele_b, NA)
-      fail_counter <- fail_counter + 1
+      allele_a <<- c(allele_a, NA)
+      allele_b <<- c(allele_b, NA)
+      fail_counter <<- fail_counter + 1
     }
 
     # Identify the heterozygous call if there is one
     het_call <- unique_snps[unique_snps %in% iupac_het_codes]
-    allele_ab <- c(allele_ab, if (length(het_call) > 0) paste(het_call) else NA)
+    allele_ab <<- c(allele_ab, if (length(het_call) > 0) paste(het_call) else NA)
 
     # Determine allele counts and frequencies
-    allele_a_count <- c(allele_a_count, sum(snps == main_snps[1], na.rm = TRUE))
-    allele_b_count <- c(allele_b_count, sum(snps == main_snps[2], na.rm = TRUE))
-    allele_ab_count <- c(allele_ab_count, sum(snps %in% iupac_het_codes, na.rm = TRUE))
-    failed_count <- c(failed_count, sum(snps == "-", na.rm = TRUE))
-    allele_a_freq <- c(allele_a_freq, round((sum(snps == main_snps[1], na.rm = TRUE) / length(snps)), digits = 3))
-    allele_b_freq <- c(allele_b_freq, round((sum(snps == main_snps[2], na.rm = TRUE) / length(snps)), digits = 3))
-    allele_ab_freq <- c(allele_ab_freq, round((sum(snps %in% iupac_het_codes, na.rm = TRUE) / length(snps)), digits = 3))
-    failed_freq <- c(failed_freq, round((sum(snps == "-", na.rm = TRUE) / length(snps)), digits = 3))
+    allele_a_count <<- c(allele_a_count, sum(snps == main_snps[1], na.rm = TRUE))
+    allele_b_count <<- c(allele_b_count, sum(snps == main_snps[2], na.rm = TRUE))
+    allele_ab_count <<- c(allele_ab_count, sum(snps %in% iupac_het_codes, na.rm = TRUE))
+    failed_count <<- c(failed_count, sum(snps == "-", na.rm = TRUE))
+    allele_a_freq <<- c(allele_a_freq, round((sum(snps == main_snps[1], na.rm = TRUE) / length(snps)), digits = 3))
+    allele_b_freq <<- c(allele_b_freq, round((sum(snps == main_snps[2], na.rm = TRUE) / length(snps)), digits = 3))
+    allele_ab_freq <<- c(allele_ab_freq, round((sum(snps %in% iupac_het_codes, na.rm = TRUE) / length(snps)), digits = 3))
+    failed_freq <<- c(failed_freq, round((sum(snps == "-", na.rm = TRUE) / length(snps)), digits = 3))
   })
 
   # Create a data frame with marker names and alleles
@@ -127,7 +127,7 @@ calc_allelic_stats <- function(processed_snp_data) {
     ifelse(!is.na(Allele_A) & is.na(Allele_B), "Mon", "Pol")
   ))
 
-  # Calculate heterozygosity (He) and PIC value for all marker
+  # 	Calculate heterozygosity (He) and PIC value for all marker
   allele_df <- calc_polymorphism(allele_df)
 
 
@@ -146,7 +146,7 @@ calc_allelic_stats <- function(processed_snp_data) {
 #'
 #' @return A modified version of the input data frame with three new columns:
 #' \itemize{
-#'  \item \code{Nei_H}:Nei's genetic diveristy (expected heterozgosity)
+#' 	\item \code{Nei_H}:Nei's genetic diveristy (expected heterozgosity)
 #'  \item \code{PIC}: Polymorphism Information Content
 #'  \item \code{MAF}: Minor Allele Frequency (only for polymorphic markers)
 #' }
@@ -197,6 +197,6 @@ filter_method <- function(p, q, method) {
   switch(method,
     "H" = round(1 - (p^2 + q^2), digits = 3), # Nei's H: expected heterozygosity
     "PIC" = round(1 - (p^2 + q^2) - 2 * (p^2) * (q^2), digits = 3), # PIC for biallelic markers (Botstein, 1980)
-    "MAF" = round(pmin(p, q), 3) # MAF: minor allele frequency
-  )
+    "MAF" = round(pmin(p, q), 3)
+  ) # MAF: minor allele frequency
 }
